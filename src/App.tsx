@@ -1,4 +1,5 @@
 import Player from "./components/Player";
+import PlaylistList from "./components/PlaylistList";
 import SongList from "./components/SongList";
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     <div className="p-2">
       <SongList />
       <Player />
+      <PlaylistList />
     </div>
   );
 }

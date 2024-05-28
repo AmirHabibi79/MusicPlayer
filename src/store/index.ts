@@ -9,6 +9,8 @@ import {
   buffer,
 } from "./player";
 
+import { playlists } from "./playlist";
+
 export {
   Songs as SongsAtom,
   selectedSong as SelectedAtom,
@@ -19,4 +21,5 @@ export {
   isSeeking as isSeekingAtom,
   volume as VolumeAtom,
   buffer as BufferAtom,
+  playlists as PlaylistAtom,
 };
