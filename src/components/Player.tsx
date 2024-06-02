@@ -1,82 +1,68 @@
 import { LegacyRef, useRef, useEffect } from "react";
-import useSelectedSong from "../hooks/useSelectedSong";
 import usePlayer from "../hooks/usePlayer";
 import { getDisplayTimeBySeconds } from "../helper/utils.ts";
 import { Slider, LinearProgress } from "@mui/material";
+import { Loop } from "../store/player.ts";
 
 export default function Player() {
-  const [selected] = useSelectedSong();
   const {
-    isPlaying,
     play,
     pause,
     currentTime,
     duration,
-    setDuration,
-    setCurrentTime,
-    loop,
-    changeLoop,
-    isSeek,
-    setIsSeek,
-    volume,
     changeVolume,
+    changeLoop,
+    volume,
     buffer,
-    changeBuffer,
     nextSong,
     preSong,
+    isPlayerReady,
+    playerInit,
+    isMute,
+    changeIsMute,
+    onSeek,
+    onSeekFinished,
+    loop,
+    isLoading,
+    isPlaying,
   } = usePlayer();
-  const setBuffer = () => {
-    const bufferedEnd = playerRef.current?.buffered.end(
-      playerRef.current?.buffered.length - 1
-    ) as number;
-    changeBuffer(bufferedEnd);
-  };
+
   const playerRef = useRef<HTMLAudioElement>();
+
   useEffect(() => {
-    if (isPlaying == false) {
-      playerRef?.current?.pause();
-    } else {
-      playerRef?.current?.play();
-    }
-  }, [isPlaying]);
-  useEffect(() => {
-    playerRef.current!.volume = volume;
-  }, [volume]);
+    playerInit(playerRef.current!);
+  }, []);
   return (
     <div className="h-[300px]">
-      <audio
-        ref={playerRef as LegacyRef<HTMLAudioElement>}
-        src={selected?.Link}
-        autoPlay={isPlaying}
-        onTimeUpdate={() => {
-          if (isSeek) return;
-          setCurrentTime(playerRef?.current?.currentTime as number);
-        }}
-        onLoadedMetadata={() => {
-          setDuration(playerRef?.current?.duration as number);
-          setBuffer();
-        }}
-        loop={loop}
-        onProgress={setBuffer}
-      />
+      {!isPlayerReady && <span>player is not ready</span>}
+      <audio ref={playerRef as LegacyRef<HTMLAudioElement>} />
       <div className="flex flex-col gap-2 h-full">
-        <button onClick={play}>play</button>
+        <button onClick={() => play()}>play</button>
         <button onClick={pause}>pause</button>
-        <button onClick={changeLoop}>changeLoop</button>
+        <button onClick={changeLoop}>
+          {loop === Loop.noLoop
+            ? "no loop"
+            : loop === Loop.allSong
+            ? "all song"
+            : "single song"}
+        </button>
         <button onClick={nextSong}>next</button>
         <button onClick={preSong}>pre</button>
+        <button onClick={changeIsMute}>{isMute ? "dont mute" : "mute"}</button>
+        <span>{buffer}</span>
+        <span>{isLoading ? "loading" : "finished"}</span>
+        <span>{isPlaying ? "playing" : "not playing"}</span>
+
         <span>current: {getDisplayTimeBySeconds(currentTime)}</span>
         <span>duration: {getDisplayTimeBySeconds(duration)}</span>
         <Slider
           value={currentTime}
           max={duration}
           onChange={(_, v) => {
-            setIsSeek(true);
-            setCurrentTime(v as number);
+            onSeek(v as number);
           }}
           onChangeCommitted={() => {
-            setIsSeek(false);
-            playerRef.current!.currentTime = currentTime as number;
+            onSeekFinished();
           }}
         />
         <LinearProgress variant="buffer" value={0} valueBuffer={buffer} />
