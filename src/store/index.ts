@@ -7,19 +7,41 @@ import {
   isSeeking,
   volume,
   buffer,
+  playerElement,
+  isPlayerReady,
+  isPlayerInit,
+  isMute,
+  isLoading,
 } from "./player";
 
-import { playlists } from "./playlist";
+import {
+  playlists,
+  isAddingSong,
+  selectedPlaylistToEdit,
+  getPlaylists,
+  selectedPlaylistToPlayId,
+  getSongsFromSelectedPlaylist,
+} from "./playlist";
 
 export {
   Songs as SongsAtom,
   selectedSong as SelectedAtom,
-  isPlaying as isPlayingAtom,
+  isPlaying as IsPlayingAtom,
   currentTime as CurrentTimeAtom,
   duration as DurationAtom,
   loop as LoopAtom,
-  isSeeking as isSeekingAtom,
+  isSeeking as IsSeekingAtom,
   volume as VolumeAtom,
   buffer as BufferAtom,
+  playerElement as PlayerElementAtom,
+  isPlayerReady as IsPlayerReadyAtom,
+  isPlayerInit as IsPlayerInitAtom,
+  isMute as IsMuteAtom,
   playlists as PlaylistAtom,
+  isAddingSong as IsAddingSongToPlaylistAtom,
+  selectedPlaylistToEdit as SelectedPlaylistToEditAtom,
+  getPlaylists as GetPlaylistSelector,
+  selectedPlaylistToPlayId as SelectedPlaylistToPlayIdAtom,
+  getSongsFromSelectedPlaylist as GetSongsFromSelectedPlaylistSelector,
+  isLoading as IsLoadingAtom,
 };
