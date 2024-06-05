@@ -12,6 +12,7 @@ import {
   isPlayerInit,
   isMute,
   isLoading,
+  isKeyboardSetup,
 } from "./player";
 
 import {
@@ -44,4 +45,5 @@ export {
   selectedPlaylistToPlayId as SelectedPlaylistToPlayIdAtom,
   getSongsFromSelectedPlaylist as GetSongsFromSelectedPlaylistSelector,
   isLoading as IsLoadingAtom,
+  isKeyboardSetup as IskeyboardSetupAtom,
 };

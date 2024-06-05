@@ -16,6 +16,10 @@ const playerElement = atom<HTMLAudioElement | null>({
   key: "playerElement",
   default: null,
 });
+const isKeyboardSetup = atom({
+  key: "iskeyboardsetup",
+  default: false,
+});
 const isPlaying = atom({
   key: "isplaying",
   default: false,
@@ -65,4 +69,5 @@ export {
   isPlayerInit,
   isMute,
   isLoading,
+  isKeyboardSetup,
 };

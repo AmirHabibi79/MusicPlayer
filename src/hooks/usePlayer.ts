@@ -16,6 +16,7 @@ import {
   IsMuteAtom,
   GetSongsFromSelectedPlaylistSelector,
   IsLoadingAtom,
+  IskeyboardSetupAtom,
 } from "../store/index";
 import { checkType, clamp, fadeIn, fadeOut } from "../helper/utils";
 import useSongs from "./useSongs";
@@ -34,6 +35,8 @@ export default function usePlayer() {
   const [, setIsPlayerInit] = useRecoilState(IsPlayerInitAtom);
 
   const [isPlayerReady, setIsPlayerReady] = useRecoilState(IsPlayerReadyAtom);
+  const [isKeyboardSetup, setIsKeyboardSetup] =
+    useRecoilState(IskeyboardSetupAtom);
 
   const [playerElem, setPlayerElem] = useRecoilState(PlayerElementAtom);
 
@@ -445,6 +448,94 @@ export default function usePlayer() {
       setIsPlayerReady(true);
     }
   }, [isPlayerReady, playerElem, volume]);
+  const internal_togglePlayPause = useRecoilCallback(
+    ({ snapshot }) =>
+      () => {
+        const playing = snapshot.getLoadable(IsPlayingAtom).contents as boolean;
+        if (playing) {
+          pause();
+        } else {
+          play();
+        }
+      },
+    []
+  );
+  const internal_changeVolume = useRecoilCallback(
+    ({ snapshot }) =>
+      (byAmount: number) => {
+        const v = snapshot.getLoadable(VolumeAtom).contents as number;
+        changeVolume(v + byAmount);
+      },
+    []
+  );
+  const internal_skip = useRecoilCallback(
+    ({ snapshot }) =>
+      (byAmount: number) => {
+        const player = snapshot.getLoadable(PlayerElementAtom)
+          .contents as HTMLAudioElement;
+        const current = snapshot.getLoadable(CurrentTimeAtom)
+          .contents as number;
+        const duration = snapshot.getLoadable(DurationAtom).contents as number;
+        const total = current + byAmount;
+        if (total >= duration) {
+          nextSong();
+        } else if (total <= 0) {
+          preSong();
+        } else {
+          setIsSeek(true);
+          setCurrentTime(total);
+          player.currentTime = total;
+          setIsSeek(false);
+        }
+      },
+    []
+  );
+  const setupKeyboard = useRecoilCallback(
+    ({ snapshot }) =>
+      () => {
+        const isK = snapshot.getLoadable(IskeyboardSetupAtom)
+          .contents as boolean;
+        if (!isK) {
+          document.addEventListener("keydown", (e) => {
+            switch (e.code) {
+              case "Space":
+                internal_togglePlayPause();
+                break;
+              case "KeyN":
+                nextSong();
+                break;
+              case "KeyP":
+                preSong();
+                break;
+              case "KeyL":
+                changeLoop();
+                break;
+              case "KeyM":
+                changeIsMute();
+                break;
+              case "ArrowUp":
+                internal_changeVolume(0.1);
+                break;
+              case "ArrowDown":
+                internal_changeVolume(-0.1);
+                break;
+              case "ArrowRight":
+                internal_skip(5);
+                break;
+              case "ArrowLeft":
+                internal_skip(-5);
+                break;
+            }
+          });
+          setIsKeyboardSetup(true);
+        }
+      },
+
+    []
+  );
+  useEffect(() => {
+    setupKeyboard();
+  }, []);
 
   return {
     isPlaying,
