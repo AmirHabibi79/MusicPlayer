@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 //also install types for lodash
 import _ from "lodash";
+import { gsap } from "gsap";
 
 const addHeadingZero = (num: number): string => {
   return num > 9 ? num.toString() : `0${num}`;
@@ -60,4 +61,15 @@ export const makeUniqId = (concat?: string) => {
 };
 export const throttle = (fn: (...args: any) => any, wait: number) => {
   return _.throttle(fn, wait, { leading: true, trailing: true });
+};
+const ease = "circ.out";
+export const fadeIn = (
+  player: HTMLAudioElement,
+  volume: number,
+  onComplete?: () => void
+) => {
+  gsap.to(player, { volume: volume, onComplete: onComplete, ease: ease });
+};
+export const fadeOut = (player: HTMLAudioElement, onComplete?: () => void) => {
+  gsap.to(player, { volume: 0, onComplete: onComplete, ease: ease });
 };
