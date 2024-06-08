@@ -5,7 +5,7 @@ export default function CurrentTimeSlider() {
   const { currentTime, duration, onSeek, onSeekFinished, buffer } = usePlayer();
 
   return (
-    <div className="h-[20px] flex items-center relative">
+    <div className="h-[20px] flex flex-shrink-0 flex-grow items-center relative">
       <Slider
         value={currentTime}
         max={duration}

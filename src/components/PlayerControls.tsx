@@ -1,13 +1,14 @@
 import usePlayer from "../hooks/usePlayer";
 import { Loop } from "../store/player";
 import VolumeSlider from "./VolumeSlider";
-import CurrentTimeSlider from "./CurrentTimeSlider";
-import { getDisplayTimeBySeconds } from "../helper/utils";
 import { TbRepeat, TbRepeatOff, TbRepeatOnce } from "react-icons/tb";
 import { IoPauseCircle, IoPlayCircle } from "react-icons/io5";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import { IconContext } from "react-icons";
-
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { useState } from "react";
+import { useMediaQuery } from "@mui/material";
+import CurrentTimeSliderWithTime from "./CurrentTimeSliderWithTime";
 export default function PlayerControls() {
   const {
     play,
@@ -16,84 +17,123 @@ export default function PlayerControls() {
     loop,
     nextSong,
     preSong,
-    // isLoading,
     isPlaying,
     selected,
-    currentTime,
-    duration,
-    buffer,
   } = usePlayer();
+  const is640px = useMediaQuery("(min-width:640px)");
+  const [isDown, setIsDown] = useState(is640px);
+  const onClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    callback: () => void
+  ) => {
+    e.currentTarget.blur();
+    callback();
+  };
   return (
     <>
       {selected !== null && (
         <IconContext.Provider value={{ size: "20" }}>
-          <div className="flex flex-col p-2 bg-[#DFDFDF] rounded-sm">
-            <div className="flex flex-col items-center">
+          <button
+            onClick={() => {
+              setIsDown(true);
+            }}
+            className={`${
+              isDown ? "hidden" : "block"
+            } absolute top-2 left-2 z-10`}
+          >
+            <MdOutlineKeyboardArrowDown size={30} />
+          </button>
+          <div
+            className={`  absolute flex justify-between bg-[#DFDFDF] ${
+              isDown
+                ? "h-[50px] bottom-2 w-[calc(100%-20px)] rounded-3xl mx-auto flex-row p-2 items-center"
+                : " w-full h-full  left-0 top-0  flex-col  p-4  rounded-sm"
+            }`}
+          >
+            <div
+              onClick={
+                !is640px
+                  ? () => {
+                      setIsDown(false);
+                    }
+                  : () => {}
+              }
+              className={`flex items-center ${
+                isDown
+                  ? "mt-0 flex-row gap-1 cursor-pointer sm:cursor-default"
+                  : "flex-col  mt-40 "
+              }  `}
+            >
               <img
-                className="w-[100px] h-[100px] rounded-sm "
+                className={`${
+                  isDown
+                    ? "w-[40px] h-[40px] rounded-full"
+                    : "w-[150px] h-[150px] rounded-sm"
+                } `}
                 src={selected?.Cover}
                 alt={selected?.Name}
               />
-              <span className="font-bold text-lg ">{selected?.Name}</span>
-              <span className="font-light text-sm ">{selected?.Artist}</span>
+              <div className="flex flex-col items-center">
+                <span className={`${isDown && "text-base"} font-bold text-lg`}>
+                  {selected?.Name}
+                </span>
+                <span className="font-light text-sm ">{selected?.Artist}</span>
+              </div>
             </div>
-            <div className="flex flex-col px-2">
-              <CurrentTimeSlider />
-              <div className="flex items-center justify-between mt-1">
-                <span className="font-extralight text-sm  self-end">
-                  {getDisplayTimeBySeconds(currentTime)}
-                </span>
-
-                <span className="font-extralight text-sm self-end">
-                  {getDisplayTimeBySeconds(duration)}
-                </span>
+            <div
+              className={`flex  flex-col px-2 sm:flex-row sm:gap-2 md:gap-4`}
+            >
+              <div
+                className={`${
+                  isDown ? "hidden" : "flex flex-col"
+                }  sm:flex sm:w-[300px] lg:w-[400px] `}
+              >
+                <CurrentTimeSliderWithTime under={!isDown} />
               </div>
               <div className="flex items-center gap-2 self-center ">
                 <button
                   onClick={(e) => {
-                    e.currentTarget.blur();
-                    preSong();
+                    onClick(e, preSong);
                   }}
                 >
-                  <BiSkipPrevious size={40} />
+                  <BiSkipPrevious size={isDown ? 30 : 40} />
                 </button>
                 {isPlaying ? (
                   <button
                     onClick={(e) => {
-                      e.currentTarget.blur();
-                      pause();
+                      onClick(e, pause);
                     }}
                   >
-                    <IoPauseCircle size={60} />
+                    <IoPauseCircle size={isDown ? 40 : 60} />
                   </button>
                 ) : (
                   <button
                     onClick={(e) => {
-                      e.currentTarget.blur();
-                      play();
+                      onClick(e, play);
                     }}
                   >
-                    <IoPlayCircle size={60} />
+                    <IoPlayCircle size={isDown ? 40 : 60} />
                   </button>
                 )}
 
                 <button
                   onClick={(e) => {
-                    e.currentTarget.blur();
-                    nextSong();
+                    onClick(e, nextSong);
                   }}
                 >
-                  <BiSkipNext size={40} />
+                  <BiSkipNext size={isDown ? 30 : 40} />
                 </button>
               </div>
-              <div className="flex items-center justify-between">
+              <div
+                className={`${
+                  isDown ? "hidden" : "flex"
+                } sm:hidden sm:justify-normal md:flex md:gap-3 items-center justify-between `}
+              >
                 <VolumeSlider />
 
-                {/* <button onClick={pause}>pause</button> */}
                 <button
                   onClick={(e) => {
-                    e.currentTarget.blur();
-                    changeLoop();
+                    onClick(e, changeLoop);
                   }}
                 >
                   {loop === Loop.noLoop ? (
@@ -104,8 +144,6 @@ export default function PlayerControls() {
                     <TbRepeatOnce />
                   )}
                 </button>
-                {/* <span>{isLoading ? "loading" : "finished"}</span>
-      <span>{isPlaying ? "playing" : "not playing"}</span> */}
               </div>
             </div>
           </div>
