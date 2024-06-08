@@ -7,7 +7,7 @@ export default function SongItem({ song, onClick }: Props) {
   return (
     <div
       onClick={() => onClick(song.Id)}
-      className="flex flex-col flex-shrink-0"
+      className="flex flex-col flex-shrink-0 cursor-pointer "
       key={song.Id}
     >
       <img className="w-[80px] h-[80px]" src={song.Cover} alt={song.Name} />

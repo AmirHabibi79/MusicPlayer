@@ -1,5 +1,4 @@
 import { Slider } from "@mui/material";
-import React from "react";
 import usePlayer from "../hooks/usePlayer";
 import { IoVolumeHigh, IoVolumeMute } from "react-icons/io5";
 
@@ -20,7 +19,6 @@ export default function VolumeSlider() {
         onChange={(_, v) => {
           changeVolume(v as number);
         }}
-        //TODO:fix the rail color
         sx={{
           "& .MuiSlider-rail": {
             color: "#eeeee4",
@@ -49,7 +47,6 @@ export default function VolumeSlider() {
         step={0.1}
         max={1}
         size="small"
-        // orientation="vertical"
       />
     </div>
   );

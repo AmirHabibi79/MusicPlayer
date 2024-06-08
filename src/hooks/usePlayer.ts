@@ -77,6 +77,8 @@ export default function usePlayer() {
   const internal_onTimeUpdate = useRecoilCallback(
     ({ snapshot }) =>
       () => {
+        //TODO: save music with current time to local storage
+
         const seek = snapshot.getLoadable(IsSeekingAtom).contents as boolean;
         const PlayerElement = snapshot.getLoadable(PlayerElementAtom).contents;
 
@@ -213,6 +215,7 @@ export default function usePlayer() {
     []
   );
   const playerInit = (playerElem: HTMLAudioElement) => {
+    //TODO: load music from local storage if there is
     checkType(playerElem, "htmlaudioelement");
     setPlayerElem(playerElem);
     setIsPlayerInit(true);
@@ -424,6 +427,8 @@ export default function usePlayer() {
   useEffect(() => {
     if (isPlayerReady !== true && playerElem !== null) {
       playerElem.onloadstart = () => {
+        //TODO: save music to local storage
+
         setIsLoading(true);
       };
       playerElem.ondurationchange = () => {

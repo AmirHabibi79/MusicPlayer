@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { LegacyRef, useRef, useEffect, useState } from "react";
+import { LegacyRef, useRef, useEffect } from "react";
 import usePlayer from "../hooks/usePlayer";
 import PlayerControls from "./PlayerControls.tsx";
 

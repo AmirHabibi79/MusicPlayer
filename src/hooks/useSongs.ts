@@ -9,7 +9,7 @@ export default function useSongs() {
         const Songs = snapshot.getLoadable(SongsAtom).contents as Song[];
         return Songs;
       },
-    [SongsAtom]
+    []
   );
   const getSongById = useRecoilCallback(
     () => (songId: number) => {
@@ -23,7 +23,7 @@ export default function useSongs() {
       const Songs = getSongsSnapshotContetns();
       return Songs[index];
     },
-    [SongsAtom]
+    []
   );
   const getLengthOfSongs = useRecoilCallback(
     () => () => {
@@ -31,7 +31,7 @@ export default function useSongs() {
 
       return Songs.length;
     },
-    [SongsAtom]
+    []
   );
   const getFirstSong = useRecoilCallback(
     () => () => {
@@ -39,7 +39,7 @@ export default function useSongs() {
 
       return Songs[0];
     },
-    [SongsAtom]
+    []
   );
   const getLastSong = useRecoilCallback(
     () => () => {
@@ -47,7 +47,7 @@ export default function useSongs() {
 
       return Songs[Songs.length - 1];
     },
-    [SongsAtom]
+    []
   );
   const getIndexOfSongBySong = useRecoilCallback(
     () => (song: Song) => {
@@ -55,7 +55,7 @@ export default function useSongs() {
 
       return Songs.indexOf(song);
     },
-    [SongsAtom]
+    []
   );
   return {
     songs,

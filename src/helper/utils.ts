@@ -68,8 +68,18 @@ export const fadeIn = (
   volume: number,
   onComplete?: () => void
 ) => {
-  gsap.to(player, { volume: volume, onComplete: onComplete, ease: ease });
+  gsap.to(player, {
+    volume: volume,
+    onComplete: onComplete,
+    ease: ease,
+    duration: 0.2,
+  });
 };
 export const fadeOut = (player: HTMLAudioElement, onComplete?: () => void) => {
-  gsap.to(player, { volume: 0, onComplete: onComplete, ease: ease });
+  gsap.to(player, {
+    volume: 0,
+    onComplete: onComplete,
+    ease: ease,
+    duration: 0.2,
+  });
 };

@@ -7,7 +7,7 @@ function App() {
     <div className="p-2">
       <SongList />
       <Player />
-      <PlaylistList />
+      {/* <PlaylistList /> */}
     </div>
   );
 }
