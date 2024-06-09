@@ -1,23 +1,30 @@
 import { Slider } from "@mui/material";
 import usePlayer from "../hooks/usePlayer";
 import { IoVolumeHigh, IoVolumeMute } from "react-icons/io5";
+import { RefObject, useRef } from "react";
 
 export default function VolumeSlider() {
   const { volume, changeVolume, changeIsMute, isMute } = usePlayer();
+  const sliderRef = useRef<HTMLSpanElement>() as RefObject<HTMLSpanElement>;
+
   return (
     <div className="h-[20px]  w-[120px] flex  items-center gap-3 ">
       <button
         onClick={(e) => {
-          e.currentTarget.blur();
           changeIsMute();
         }}
       >
         {isMute ? <IoVolumeMute /> : <IoVolumeHigh />}
       </button>
       <Slider
+        ref={sliderRef}
         value={volume}
         onChange={(_, v) => {
           changeVolume(v as number);
+        }}
+        onChangeCommitted={() => {
+          console.log(sliderRef.current);
+          sliderRef.current?.blur();
         }}
         sx={{
           "& .MuiSlider-rail": {

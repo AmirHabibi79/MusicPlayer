@@ -24,8 +24,6 @@ import { Song } from "../types/Song";
 import { useEffect } from "react";
 import usePlaylist from "./usePlaylist";
 import { Loop } from "../store/player";
-import $ from "jquery";
-import { gsap } from "gsap";
 export default function usePlayer() {
   //TODO: refactor code
   //TODO: make the function as selectors
@@ -35,8 +33,7 @@ export default function usePlayer() {
   const [, setIsPlayerInit] = useRecoilState(IsPlayerInitAtom);
 
   const [isPlayerReady, setIsPlayerReady] = useRecoilState(IsPlayerReadyAtom);
-  const [isKeyboardSetup, setIsKeyboardSetup] =
-    useRecoilState(IskeyboardSetupAtom);
+  const [, setIsKeyboardSetup] = useRecoilState(IskeyboardSetupAtom);
 
   const [playerElem, setPlayerElem] = useRecoilState(PlayerElementAtom);
 
